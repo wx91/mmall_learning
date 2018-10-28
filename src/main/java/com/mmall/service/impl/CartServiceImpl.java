@@ -17,12 +17,14 @@ import com.mmall.vo.CartVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 
-@Service
+@Service("iCartService")
+@Transactional
 public class CartServiceImpl implements ICartService {
     @Autowired
     private CartMapper cartMapper;

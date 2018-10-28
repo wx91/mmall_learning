@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-@Service
+@Service("iUserService")
 @Transactional
 public class UserServiceImpl implements IUserService {
     @Autowired

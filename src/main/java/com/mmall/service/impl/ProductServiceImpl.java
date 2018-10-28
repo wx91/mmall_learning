@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("iProductService")
 @Transactional
 public class ProductServiceImpl implements IProductService {
 

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 
-@Service
+@Service("iFileService")
 public class FileServiceImpl implements IFileService {
 
     private Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
