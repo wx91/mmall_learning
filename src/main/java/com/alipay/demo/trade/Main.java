@@ -108,8 +108,6 @@ public class Main {
 
     // 测试系统商交易保障调度
     public void test_monitor_schedule_logic() {
-        SerializationConfig
-
         // 启动交易保障线程
         DemoHbRunner demoRunner = new DemoHbRunner(monitorService);
         demoRunner.setDelay(5); // 设置启动后延迟5秒开始调度，不设置则默认3秒
