@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import redis.clients.jedis.JedisPool;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,18 +43,18 @@ public class UserController {
         ServerResponse<User> response = iUserService.login(username, password);
         if (response.isSuccess()) {
 //            session.setAttribute(Const.CURRENT_USER, response.getData());
-            CookieUtil.writeLoginToken(httpServletResponse,session.getId());
-            CookieUtil.readLoginToken(httpServletRequest);
-            CookieUtil.delLoginToken(httpServletRequest,httpServletResponse);
-            RedisPoolUtil.setEx(session.getId(), JsonUtil.obj2Str(response.getData()),Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
+            CookieUtil.writeLoginToken(httpServletResponse, session.getId());
+            RedisPoolUtil.setEx(session.getId(), JsonUtil.obj2Str(response.getData()), Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
         }
         return response;
     }
 
     @RequestMapping(value = "logout.do", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<String> logout(HttpSession session) {
-        session.removeAttribute(Const.CURRENT_USER);
+    public ServerResponse<String> logout(HttpSession session, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+//        session.removeAttribute(Const.CURRENT_USER);
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        CookieUtil.delLoginToken(httpServletRequest, httpServletResponse);
         return ServerResponse.createBySuccess();
     }
 
