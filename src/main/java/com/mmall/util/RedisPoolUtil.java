@@ -6,6 +6,8 @@ import redis.clients.jedis.Jedis;
 
 @Slf4j
 public class RedisPoolUtil {
+
+
     /**
      * 设置key的有效期，单位是秒
      *
@@ -19,89 +21,96 @@ public class RedisPoolUtil {
         try {
             jedis = RedisPool.getJedis();
             result = jedis.expire(key, exTime);
-            RedisPool.returnResource(jedis);
-            return result;
         } catch (Exception e) {
-            log.error("expire key:{} error {}", key, e);
+            log.error("expire key:{} error", key, e);
             RedisPool.returnBrokenResource(jedis);
             return result;
         }
+        RedisPool.returnResource(jedis);
+        return result;
     }
 
-    /**
-     * @param key
-     * @param value
-     * @param exTime 单位时秒
-     * @return
-     */
+    //exTime的单位是秒
     public static String setEx(String key, String value, int exTime) {
-        String result = null;
         Jedis jedis = null;
+        String result = null;
         try {
             jedis = RedisPool.getJedis();
             result = jedis.setex(key, exTime, value);
-            RedisPool.returnResource(jedis);
-            return result;
         } catch (Exception e) {
-            log.error("setex key:{} value:{} error {}", key, value, e);
+            log.error("setex key:{} value:{} error", key, value, e);
             RedisPool.returnBrokenResource(jedis);
             return result;
         }
+        RedisPool.returnResource(jedis);
+        return result;
     }
 
     public static String set(String key, String value) {
-        String result = null;
         Jedis jedis = null;
+        String result = null;
+
         try {
             jedis = RedisPool.getJedis();
             result = jedis.set(key, value);
-            RedisPool.returnResource(jedis);
-            return result;
         } catch (Exception e) {
-            log.error("set key:{} value:{} error {}", key, value, e);
+            log.error("set key:{} value:{} error", key, value, e);
             RedisPool.returnBrokenResource(jedis);
             return result;
         }
+        RedisPool.returnResource(jedis);
+        return result;
     }
 
     public static String get(String key) {
-        String result = null;
         Jedis jedis = null;
+        String result = null;
         try {
             jedis = RedisPool.getJedis();
             result = jedis.get(key);
-            RedisPool.returnResource(jedis);
-            return result;
         } catch (Exception e) {
-            log.error("get key:{}  error {}", key, e);
+            log.error("get key:{} error", key, e);
             RedisPool.returnBrokenResource(jedis);
             return result;
         }
+        RedisPool.returnResource(jedis);
+        return result;
     }
 
     public static Long del(String key) {
-        Long result = null;
         Jedis jedis = null;
+        Long result = null;
         try {
             jedis = RedisPool.getJedis();
             result = jedis.del(key);
-            RedisPool.returnResource(jedis);
-            return result;
         } catch (Exception e) {
-            log.error("get key:{}  error {}", key, e);
+            log.error("del key:{} error", key, e);
             RedisPool.returnBrokenResource(jedis);
             return result;
         }
+        RedisPool.returnResource(jedis);
+        return result;
     }
 
     public static void main(String[] args) {
         Jedis jedis = RedisPool.getJedis();
-        RedisPoolUtil.set("keyTest", "value");
-        String value = RedisPoolUtil.get("keyTest");
-        RedisPoolUtil.setEx("keyex", "valueEx", 60 * 10);
-        RedisPoolUtil.expire("keyTest",60*20);
-        RedisPoolUtil.del("keyTest");
-        System.out.println("end");
-    }
 
+        RedisShardedPoolUtil.set("keyTest", "value");
+
+        String value = RedisShardedPoolUtil.get("keyTest");
+
+        RedisShardedPoolUtil.setEx("keyex", "valueex", 60 * 10);
+
+        RedisShardedPoolUtil.expire("keyTest", 60 * 20);
+
+        RedisShardedPoolUtil.del("keyTest");
+
+
+        String aaa = RedisShardedPoolUtil.get(null);
+        System.out.println(aaa);
+
+        System.out.println("end");
+
+
+    }
 }
